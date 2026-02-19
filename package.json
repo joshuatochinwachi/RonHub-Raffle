@@ -1,0 +1,16 @@
+{
+    "name": "ronhub-raffle",
+    "version": "1.0.0",
+    "description": "Premium Raffle System for the Ronin Blockchain",
+    "private": true,
+    "workspaces": [
+        "frontend",
+        "backend"
+    ],
+    "scripts": {
+        "dev:frontend": "npm run dev --workspace=ronhub-raffle-frontend",
+        "dev:backend": "npm run dev --workspace=ronhub-raffle-backend",
+        "start:backend": "npm run start --workspace=ronhub-raffle-backend",
+        "install:all": "npm install && npm install --prefix frontend && npm install --prefix backend"
+    }
+}

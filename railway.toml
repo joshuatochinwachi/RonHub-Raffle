@@ -1,0 +1,9 @@
+[build]
+root = "backend"
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/api/raffle-info"
+restartPolicy = "on-failure"
+maxRetries = 5

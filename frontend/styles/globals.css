@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 7, 11, 20;
+  --background-end-rgb: 7, 11, 20;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── Animated Background Orbs ───────────────────────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50%       { transform: scale(1.15); opacity: 0.45; }
+}
+
+.orb-1 {
+  position: fixed; width: 600px; height: 600px;
+  background: radial-gradient(circle, #1D4ED8 0%, transparent 70%);
+  border-radius: 50%; filter: blur(80px);
+  top: -200px; left: -200px;
+  animation: pulse-glow 8s ease-in-out infinite;
+  z-index: -1;
+}
+
+.orb-2 {
+  position: fixed; width: 600px; height: 600px;
+  background: radial-gradient(circle, #1E40AF 0%, transparent 70%);
+  bottom: -200px; right: -200px;
+  border-radius: 50%; filter: blur(80px);
+  animation: pulse-glow 10s ease-in-out infinite reverse;
+  z-index: -1;
+}
+
+.orb-3 {
+  position: fixed; width: 600px; height: 600px;
+  background: radial-gradient(circle, #2563EB 0%, transparent 70%);
+  top: 40%; left: 50%; transform: translate(-50%, -50%);
+  border-radius: 50%; filter: blur(80px);
+  animation: pulse-glow 12s ease-in-out infinite 2s;
+  z-index: -1;
+}
+
+/* ─── Card Glint Hover Effect ────────────────────────────────────────── */
+.card-glint { 
+  position: relative; 
+  overflow: hidden; 
+}
+
+.card-glint::after {
+  content: '';
+  position: absolute; top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 1s ease;
+}
+
+.card-glint:hover::after { 
+  left: 140%; 
+}
+
+/* ─── Glassmorphism ──────────────────────────────────────────────────── */
+.glass {
+  background: rgba(29, 78, 216, 0.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #070B14;
+}
+::-webkit-scrollbar-thumb {
+  background: #1D4ED8;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3B82F6;
+}
