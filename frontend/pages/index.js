@@ -80,7 +80,7 @@ export default function Home() {
                         <h2 className="text-4xl md:text-7xl lg:text-8xl font-black leading-[1] md:leading-[0.9] text-hero tracking-tighter w-full">
                             WIN THE <br />
                             <span className="text-liquid">
-                                {process.env.NEXT_PUBLIC_RAFFLE_PRIZE?.toUpperCase() || "BGS 7.5 CHARIZARD"}
+                                {process.env.NEXT_PUBLIC_RAFFLE_PRIZE?.toUpperCase() || "PIKACHU XY-P PROMO PSA 10"}
                             </span>
                         </h2>
 
@@ -97,7 +97,7 @@ export default function Home() {
                             <div className="space-y-1 md:space-y-2">
                                 <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-gold/60 block">Grand Prize Value</span>
                                 <h3 className="text-4xl md:text-8xl font-black text-gold font-display leading-none">
-                                    {process.env.NEXT_PUBLIC_RAFFLE_VALUE || "£19,299"}
+                                    {process.env.NEXT_PUBLIC_RAFFLE_VALUE || "£40,366.42"}
                                 </h3>
                             </div>
                         </div>

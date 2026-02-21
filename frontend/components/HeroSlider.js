@@ -52,7 +52,7 @@ export default function HeroSlider() {
                         <div className="absolute inset-0 premium-shimmer opacity-30 z-10 pointer-events-none" />
 
                         <img
-                            src="/charizard-front.png"
+                            src="/pikachu-front.jpg"
                             alt="Prize Front"
                             className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
                             onError={(e) => {
@@ -64,12 +64,12 @@ export default function HeroSlider() {
                         <div className="absolute inset-0 bg-gradient-to-tr from-ronhub-blue/0 via-white/5 to-ronhub-light-blue/0 opacity-50 z-20" />
 
                         {/* Valuation Overlay */}
-                        <div className="absolute bottom-8 left-8 right-8 glass p-5 rounded-2xl border border-white/10 text-center backdrop-blur-2xl z-30">
-                            <p className="text-ronhub-light-blue text-[10px] font-black uppercase tracking-[0.3em] mb-1">
+                        <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8 glass p-4 md:p-5 rounded-2xl border border-white/10 text-center backdrop-blur-2xl z-30">
+                            <p className="text-ronhub-light-blue text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] mb-1">
                                 Est. Valuation
                             </p>
-                            <h2 className="text-3xl font-black text-white font-display tracking-tight drop-shadow-lg">
-                                {process.env.NEXT_PUBLIC_RAFFLE_VALUE || "£19,299"}
+                            <h2 className="text-2xl md:text-3xl font-black text-white font-display tracking-tight drop-shadow-lg">
+                                {process.env.NEXT_PUBLIC_RAFFLE_VALUE || "£40,366.42"}
                             </h2>
                             <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-ronhub-light-blue rounded-full blur-sm animate-pulse" />
                         </div>
@@ -78,7 +78,7 @@ export default function HeroSlider() {
                     {/* Back Face */}
                     <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl overflow-hidden border border-white/10 glass-card">
                         <img
-                            src="/charizard-back.png"
+                            src="/pikachu-back.jpg"
                             alt="Prize Back"
                             className="w-full h-full object-cover scale-105"
                             onError={(e) => {
@@ -86,12 +86,12 @@ export default function HeroSlider() {
                             }}
                         />
                         <div className="absolute inset-0 bg-ronhub-dark/60 backdrop-blur-[2px]" />
-                        <div className="absolute inset-0 flex items-center justify-center p-12 text-center">
-                            <div className="space-y-4">
-                                <span className="glass px-6 py-2 rounded-full text-[10px] font-black tracking-[0.2em] border border-white/10 shadow-xl">
-                                    {process.env.NEXT_PUBLIC_RAFFLE_DESC || "VERIFIED AUTHENTIC"}
+                        <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12 text-center">
+                            <div className="space-y-3 md:space-y-4">
+                                <span className="glass px-4 py-1.5 md:px-6 md:py-2 rounded-full text-[8px] md:text-[10px] font-black tracking-[0.2em] border border-white/10 shadow-xl">
+                                    {process.env.NEXT_PUBLIC_RAFFLE_DESC || "PSA 10 GEM MINT"}
                                 </span>
-                                <p className="text-xs text-white/60 font-medium">Click to flip card</p>
+                                <p className="text-[10px] md:text-xs text-white/60 font-medium">Click to flip card</p>
                             </div>
                         </div>
                     </div>
