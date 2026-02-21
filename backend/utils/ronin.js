@@ -10,7 +10,7 @@ require('dotenv').config();
  * @param {number} quantity - Number of tickets being purchased
  * @returns {Promise<boolean>}
  */
-async function verifyRoninTransaction(txHash, vaultAddress, usdcContract, quantity = 1) {
+async function verifyRoninTransaction(txHash, buyerAddress, vaultAddress, usdcContract, quantity = 1) {
     const provider = new ethers.JsonRpcProvider(process.env.RONIN_RPC_URL);
 
     try {
@@ -30,6 +30,7 @@ async function verifyRoninTransaction(txHash, vaultAddress, usdcContract, quanti
 
             try {
                 const parsed = transferIface.parseLog(log);
+                const from = parsed.args.from.toLowerCase();
                 const to = parsed.args.to.toLowerCase();
                 const value = parsed.args.value;
 
@@ -37,16 +38,29 @@ async function verifyRoninTransaction(txHash, vaultAddress, usdcContract, quanti
                 const ticketPrice = parseInt(process.env.TICKET_PRICE || 2);
                 const expectedAmount = BigInt(ticketPrice) * BigInt(quantity) * BigInt(10 ** 6);
 
-                if (to === vaultAddress.toLowerCase() && value === expectedAmount) {
+                // SECURITY CHECK: Verify Sender, Recipient, and Amount
+                if (from === buyerAddress.toLowerCase() &&
+                    to === vaultAddress.toLowerCase() &&
+                    value === expectedAmount) {
+
+                    // SECURITY CHECK: Verify Transaction is not too old (within last 7 days for safety)
+                    const block = await provider.getBlock(receipt.blockNumber);
+                    const sevenDaysAgo = Math.floor(Date.now() / 1000) - (7 * 24 * 60 * 60);
+
+                    if (block.timestamp < sevenDaysAgo) {
+                        throw new Error('Transaction is too old to be claimed');
+                    }
+
                     transferFound = true;
                     break;
                 }
             } catch (e) {
+                if (e.message === 'Transaction is too old to be claimed') throw e;
                 continue;
             }
         }
 
-        if (!transferFound) throw new Error(`Valid ${parseInt(process.env.TICKET_PRICE || 2) * quantity} USDC transfer not found in transaction`);
+        if (!transferFound) throw new Error(`Valid ${parseInt(process.env.TICKET_PRICE || 2) * quantity} USDC transfer from ${buyerAddress} to vault not found in transaction logs`);
         return true;
     } catch (error) {
         console.error('Ronin verification error:', error.message);

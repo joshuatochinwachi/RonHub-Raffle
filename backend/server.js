@@ -188,6 +188,7 @@ app.post('/api/buy-ticket', apiLimiter, async (req, res) => {
         // 3. Verify on-chain transaction
         await verifyRoninTransaction(
             txHash,
+            buyerAddress,
             process.env.VAULT_WALLET,
             process.env.USDC_CONTRACT,
             qty
