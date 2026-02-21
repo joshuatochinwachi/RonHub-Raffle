@@ -289,7 +289,7 @@ app.post('/api/draw-winner', authenticateAdmin, drawLimiter, async (req, res) =>
 });
 
 // ─── Start Server ────────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`RonHub Raffle Backend running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV}`);
 });
