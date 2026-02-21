@@ -9,6 +9,9 @@ export default function Home() {
     const [address, setAddress] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     useEffect(() => {
+        // Only run mouse tracking on desktop to save mobile battery/GPU
+        if (window.innerWidth < 768) return;
+
         const handleMouseMove = (e) => {
             const x = (e.clientX / window.innerWidth) * 100;
             const y = (e.clientY / window.innerHeight) * 100;
@@ -25,9 +28,9 @@ export default function Home() {
     };
 
     return (
-        <div className="relative min-h-screen pb-24 selection:bg-ronhub-blue/30 overflow-hidden">
+        <div className="relative min-h-screen pb-24 selection:bg-ronhub-blue/30 overflow-x-hidden bg-[#03050c]">
             {/* Premium Background Layer */}
-            <div className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(29,78,216,0.15)_0%,transparent_50%)]" />
+            <div className="fixed inset-0 pointer-events-none z-0 fixed-bg-layer bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(29,78,216,0.15)_0%,transparent_50%)]" />
             <div className="mesh-glow" />
             <div className="noise-overlay" />
 

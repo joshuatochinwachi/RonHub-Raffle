@@ -14,13 +14,24 @@
   --mouse-y: 50%;
 }
 
+html,
 body {
+  background: #03050c;
+  /* Solid fall-back to prevent white twitches */
   color: rgb(var(--foreground-rgb));
-  background: radial-gradient(circle at 50% 0%, #0c1222 0%, #03050c 100%);
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: radial-gradient(circle at 50% 0%, #0c1222 0%, #03050c 100%);
+  background-attachment: fixed;
+  /* Keep background stable during scroll */
 }
 
 h1,
@@ -210,24 +221,47 @@ h4,
 
 /* ─── Mobile Performance Optimizations ────────────────────────────────── */
 @media (max-width: 768px) {
+  body {
+    background: #03050c !important;
+    /* Total removal of gradients on mobile for max stability */
+  }
 
   .glass,
   .glass-card,
   header {
-    backdrop-filter: blur(8px) !important;
+    backdrop-filter: none !important;
+    /* Disable expensive blurs on mobile */
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
   }
 
   .text-liquid {
     animation: liquidShift 15s ease infinite !important;
     filter: none !important;
+    background: #fff !important;
+    /* Solid color for heavy text on mobile */
+    -webkit-text-fill-color: initial !important;
+    -webkit-background-clip: initial !important;
   }
 
-  .noise-overlay {
-    display: none;
+  .noise-overlay,
+  .mesh-glow,
+  .fixed-bg-layer {
+    display: none !important;
+    /* Deep clean of overlays */
   }
 
   .prize-card-glow {
-    box-shadow: 0 0 30px -10px rgba(245, 158, 11, 0.1);
+    box-shadow: none !important;
+    border-color: rgba(251, 191, 36, 0.3) !important;
+  }
+
+  .animate-float,
+  .prize-reveal {
+    animation: none !important;
+    /* Stop all moving parts on scroll trigger */
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
