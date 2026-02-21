@@ -10,6 +10,7 @@ const { supabase } = require('./utils/supabase');
 const { verifyRoninTransaction, generateUniqueTicketId } = require('./utils/ronin.js');
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3001;
 
 // ─── Middleware ──────────────────────────────────────────────────────
@@ -17,6 +18,16 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:3000'
 }));
 app.use(express.json());
+
+// ─── Activity Logger ────────────────────────────────────────────────
+app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} ${res.statusCode} - ${duration}ms`);
+    });
+    next();
+});
 
 // ─── Rate Limiting ───────────────────────────────────────────────────
 const apiLimiter = rateLimit({
@@ -201,6 +212,8 @@ app.post('/api/buy-ticket', apiLimiter, async (req, res) => {
 
         if (insertError) throw insertError;
 
+        console.log(`[TICKET PURCHASE] ${qty} ticket(s) bought by ${buyerAddress}. Tx: ${txHash}`);
+
         // 5. Get updated count
         const { count } = await supabase
             .from('tickets')
@@ -270,6 +283,8 @@ app.post('/api/draw-winner', authenticateAdmin, drawLimiter, async (req, res) =>
             });
 
         if (stateError) throw stateError;
+
+        console.log(`[WINNER DRAWN] Ticket #${winningTicket.id} won! Winner: ${winningTicket.buyer_address}`);
 
         res.json({
             success: true,
