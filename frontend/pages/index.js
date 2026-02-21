@@ -8,14 +8,12 @@ import UserTickets from '@/components/UserTickets';
 export default function Home() {
     const [address, setAddress] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
-    const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-
     useEffect(() => {
         const handleMouseMove = (e) => {
-            setMousePos({
-                x: (e.clientX / window.innerWidth) * 100,
-                y: (e.clientY / window.innerHeight) * 100,
-            });
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            document.documentElement.style.setProperty('--mouse-x', `${x}%`);
+            document.documentElement.style.setProperty('--mouse-y', `${y}%`);
         };
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
@@ -29,12 +27,7 @@ export default function Home() {
     return (
         <div className="relative min-h-screen pb-24 selection:bg-ronhub-blue/30 overflow-hidden">
             {/* Premium Background Layer */}
-            <div
-                className="fixed inset-0 pointer-events-none z-0"
-                style={{
-                    background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(29, 78, 216, 0.15) 0%, transparent 50%)`
-                }}
-            />
+            <div className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(29,78,216,0.15)_0%,transparent_50%)]" />
             <div className="mesh-glow" />
             <div className="noise-overlay" />
 
