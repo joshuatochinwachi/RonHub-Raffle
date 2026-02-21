@@ -4,6 +4,6 @@ builder = "NIXPACKS"
 
 [deploy]
 startCommand = "npm start"
-healthcheckPath = "/api/raffle-info"
+healthcheckPath = "/"
 restartPolicy = "on-failure"
 maxRetries = 5

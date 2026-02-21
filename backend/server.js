@@ -3,7 +3,7 @@ const cors = require('cors');
 const { rateLimit } = require('express-rate-limit');
 const crypto = require('crypto');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config();
 
 const { isValidAddress, isValidTxHash } = require('./utils/validation');
 const { supabase } = require('./utils/supabase');
@@ -146,14 +146,19 @@ app.get('/api/tickets', async (req, res) => {
 
 /**
  * POST /api/buy-ticket
- * Registers a ticket after verifying on-chain USDC transfer
+ * Registers one or more tickets after verifying on-chain USDC transfer
  */
 app.post('/api/buy-ticket', apiLimiter, async (req, res) => {
-    const { buyerAddress, txHash } = req.body;
+    const { buyerAddress, txHash, quantity = 1 } = req.body;
 
     // 1. Validate inputs
     if (!isValidAddress(buyerAddress) || !isValidTxHash(txHash)) {
         return res.status(400).json({ error: 'Invalid address or transaction hash format' });
+    }
+
+    const qty = parseInt(quantity);
+    if (isNaN(qty) || qty < 1) {
+        return res.status(400).json({ error: 'Invalid quantity' });
     }
 
     try {
@@ -162,7 +167,8 @@ app.post('/api/buy-ticket', apiLimiter, async (req, res) => {
             .from('tickets')
             .select('tx_hash')
             .eq('tx_hash', txHash)
-            .single();
+            .limit(1)
+            .maybeSingle();
 
         if (existing) {
             return res.status(409).json({ error: 'Transaction hash already used' });
@@ -172,33 +178,40 @@ app.post('/api/buy-ticket', apiLimiter, async (req, res) => {
         await verifyRoninTransaction(
             txHash,
             process.env.VAULT_WALLET,
-            process.env.USDC_CONTRACT
+            process.env.USDC_CONTRACT,
+            qty
         );
 
-        // 4. Generate unique ticket ID
-        const ticketId = await generateUniqueTicketId(supabase, parseInt(process.env.MAX_TICKETS || 10000));
+        // 4. Generate unique ticket IDs and insert
+        const maxTickets = parseInt(process.env.MAX_TICKETS || 10000);
+        const ticketRecords = [];
 
-        // 5. Store in Supabase
-        const { error: insertError } = await supabase
-            .from('tickets')
-            .insert({
+        for (let i = 0; i < qty; i++) {
+            const ticketId = await generateUniqueTicketId(supabase, maxTickets);
+            ticketRecords.push({
                 id: ticketId,
                 buyer_address: buyerAddress.toLowerCase(),
                 tx_hash: txHash
             });
+        }
+
+        const { error: insertError } = await supabase
+            .from('tickets')
+            .insert(ticketRecords);
 
         if (insertError) throw insertError;
 
-        // 6. Get updated count
+        // 5. Get updated count
         const { count } = await supabase
             .from('tickets')
             .select('*', { count: 'exact', head: true });
 
         res.json({
             success: true,
-            message: 'Ticket registered successfully!',
-            ticketNumber: ticketId,
-            totalTickets: count,
+            message: `${qty} ticket(s) registered successfully!`,
+            ticketNumbers: ticketRecords.map(r => r.id),
+            totalTicketsBought: qty,
+            totalRaffleTickets: count,
             txHash: txHash
         });
 

@@ -1,5 +1,0 @@
-[build]
-installCommand = "npm install --prefix backend"
-
-[start]
-command = "node backend/server.js"

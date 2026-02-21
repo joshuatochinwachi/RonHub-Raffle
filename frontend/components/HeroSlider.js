@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 export default function HeroSlider() {
     const [flipped, setFlipped] = useState(false);
+    const [rotate, setRotate] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -10,59 +11,103 @@ export default function HeroSlider() {
         return () => clearInterval(interval);
     }, []);
 
+    const handleMouseMove = (e) => {
+        const card = e.currentTarget;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * 15; // Max 15 deg
+        const rotateY = ((centerX - x) / centerX) * 15; // Max 15 deg
+
+        setRotate({ x: rotateX, y: rotateY });
+    };
+
+    const handleMouseLeave = () => {
+        setRotate({ x: 0, y: 0 });
+    };
+
     return (
-        <section className="flex flex-col items-center justify-center py-12 px-4">
+        <section className="flex flex-col items-center justify-center py-12 px-4 relative">
             <div className="relative w-full max-w-[400px] aspect-[2.5/3.5] perspective-1000 group">
                 {/* Glow Behind Card */}
-                <div className="absolute inset-0 bg-ronhub-blue/20 blur-[120px] rounded-full animate-pulse -z-10" />
+                <div className="absolute inset-0 bg-ronhub-blue/20 blur-[150px] rounded-full animate-pulse -z-10" />
 
                 {/* 3D Card Container */}
                 <div
-                    className={`relative w-full h-full transition-transform duration-1000 transform-style-3d cursor-pointer card-glint rounded-2xl shadow-2xl ${flipped ? 'rotate-y-180' : ''}`}
+                    className={`relative w-full h-full transition-all duration-300 transform-style-3d cursor-pointer rounded-3xl shadow-[0_50px_100px_rgba(0,0,0,0.6)] hover:shadow-ronhub-blue/20 group-hover:scale-[1.02] ${flipped ? 'rotate-y-180' : ''}`}
                     onClick={() => setFlipped(!flipped)}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    style={{
+                        transform: flipped
+                            ? `rotateY(180deg) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg)`
+                            : `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg)`
+                    }}
                 >
                     {/* Front Face */}
-                    <div className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden border border-white/10 glass">
+                    <div className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden border border-white/10 glass-card">
+                        {/* Shimmer Effect */}
+                        <div className="absolute inset-0 premium-shimmer opacity-30 z-10 pointer-events-none" />
+
                         <img
                             src="/charizard-front.png"
-                            alt="BGS 7.5 1st Edition Charizard Front"
-                            className="w-full h-full object-cover scale-110"
+                            alt="Prize Front"
+                            className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
                             onError={(e) => {
-                                e.target.src = 'https://placehold.co/400x560/070B14/1D4ED8?text=Charizard+Front';
+                                e.target.src = 'https://placehold.co/400x560/070B14/1D4ED8?text=Prize+Front';
                             }}
                         />
+
+                        {/* Holographic "Sheen" */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-ronhub-blue/0 via-white/5 to-ronhub-light-blue/0 opacity-50 z-20" />
+
                         {/* Valuation Overlay */}
-                        <div className="absolute bottom-6 left-6 right-6 glass p-4 rounded-xl border border-white/10 text-center">
-                            <p className="text-ronhub-light-blue text-xs font-semibold uppercase tracking-wider mb-1">Current Valuation</p>
-                            <h2 className="text-2xl font-bold text-white animate-pulse">{process.env.NEXT_PUBLIC_RAFFLE_VALUE || "£19,299.00"}</h2>
+                        <div className="absolute bottom-8 left-8 right-8 glass p-5 rounded-2xl border border-white/10 text-center backdrop-blur-2xl z-30">
+                            <p className="text-ronhub-light-blue text-[10px] font-black uppercase tracking-[0.3em] mb-1">
+                                Est. Valuation
+                            </p>
+                            <h2 className="text-3xl font-black text-white font-display tracking-tight drop-shadow-lg">
+                                {process.env.NEXT_PUBLIC_RAFFLE_VALUE || "£19,299"}
+                            </h2>
+                            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-ronhub-light-blue rounded-full blur-sm animate-pulse" />
                         </div>
                     </div>
 
                     {/* Back Face */}
-                    <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl overflow-hidden border border-white/10 glass">
+                    <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl overflow-hidden border border-white/10 glass-card">
                         <img
                             src="/charizard-back.png"
-                            alt="BGS 7.5 1st Edition Charizard Back"
-                            className="w-full h-full object-cover scale-110"
+                            alt="Prize Back"
+                            className="w-full h-full object-cover scale-105"
                             onError={(e) => {
-                                e.target.src = 'https://placehold.co/400x560/070B14/1D4ED8?text=Charizard+Back';
+                                e.target.src = 'https://placehold.co/400x560/070B14/1E40AF?text=Prize+Back';
                             }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-ronhub-dark/80 to-transparent" />
-                        <div className="absolute bottom-6 left-6 right-6 text-center">
-                            <span className="glass px-4 py-1.5 rounded-full text-xs font-bold border border-white/20">{process.env.NEXT_PUBLIC_RAFFLE_DESC || "BGS 7.5 GRADED"}</span>
+                        <div className="absolute inset-0 bg-ronhub-dark/60 backdrop-blur-[2px]" />
+                        <div className="absolute inset-0 flex items-center justify-center p-12 text-center">
+                            <div className="space-y-4">
+                                <span className="glass px-6 py-2 rounded-full text-[10px] font-black tracking-[0.2em] border border-white/10 shadow-xl">
+                                    {process.env.NEXT_PUBLIC_RAFFLE_DESC || "VERIFIED AUTHENTIC"}
+                                </span>
+                                <p className="text-xs text-white/60 font-medium">Click to flip card</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* 3D Transform CSS - typically added to globals.css but scoped here for 3D support */}
+            {/* 3D Transform CSS */}
             <style jsx global>{`
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
-      `}</style>
+                .perspective-1000 { perspective: 2000px; }
+                .transform-style-3d { transform-style: preserve-3d; }
+                .backface-hidden { backface-visibility: hidden; }
+                .rotate-y-180 { transform: rotateY(180deg); }
+                .glass-card {
+                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+                }
+            `}</style>
         </section>
     );
 }

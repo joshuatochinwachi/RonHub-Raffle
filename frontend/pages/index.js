@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import HeroSlider from '@/components/HeroSlider';
 import RaffleInfo from '@/components/RaffleInfo';
 import WalletButton from '@/components/WalletButton';
@@ -8,6 +8,18 @@ import UserTickets from '@/components/UserTickets';
 export default function Home() {
     const [address, setAddress] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            setMousePos({
+                x: (e.clientX / window.innerWidth) * 100,
+                y: (e.clientY / window.innerHeight) * 100,
+            });
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
 
     const handlePurchaseSuccess = (ticketNumber) => {
         // Increment trigger to refresh UserTickets
@@ -15,73 +27,123 @@ export default function Home() {
     };
 
     return (
-        <div className="flex flex-col items-center min-h-screen pb-24">
+        <div className="relative min-h-screen pb-24 selection:bg-ronhub-blue/30 overflow-hidden">
+            {/* Premium Background Layer */}
+            <div
+                className="fixed inset-0 pointer-events-none z-0"
+                style={{
+                    background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(29, 78, 216, 0.15) 0%, transparent 50%)`
+                }}
+            />
+            <div className="mesh-glow" />
+            <div className="noise-overlay" />
+
             {/* Header / Navbar */}
-            <header className="w-full max-w-7xl flex items-center justify-between p-6 md:p-10">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-ronhub-blue flex items-center justify-center shadow-[0_0_15px_rgba(29,78,216,0.5)]">
-                        <span className="text-xl font-black italic">R</span>
+            <header className="w-full max-w-7xl mx-auto flex items-center justify-between p-6 md:p-10 sticky top-0 z-50 backdrop-blur-md bg-transparent">
+                <div className="flex items-center gap-3 group cursor-pointer">
+                    <div className="w-12 h-12 rounded-2xl overflow-hidden flex items-center justify-center shadow-[0_0_20px_rgba(29,78,216,0.3)] transition-transform group-hover:scale-110 duration-500">
+                        <img
+                            src="/logo.png"
+                            alt="RonHub Logo"
+                            className="w-full h-full object-contain mix-blend-lighten"
+                        />
                     </div>
-                    <h1 className="text-xl font-black uppercase tracking-tighter hidden sm:block">
-                        RonHub <span className="text-ronhub-light-blue">Raffle</span>
-                    </h1>
+                    <div className="flex flex-col -space-y-1">
+                        <h1 className="text-2xl font-black uppercase tracking-tighter leading-none">
+                            RonHub
+                        </h1>
+                        <span className="text-[10px] font-bold text-ronhub-light-blue uppercase tracking-[0.3em]">
+                            Raffle
+                        </span>
+                    </div>
                 </div>
 
                 <WalletButton onAddressChange={setAddress} />
             </header>
 
             {/* Hero Section */}
-            <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-6 mt-4">
-                {/* Left: 3D Showcase */}
-                <div className="order-2 lg:order-1">
-                    <HeroSlider />
-                </div>
+            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center px-6 mt-8 md:mt-16">
 
-                {/* Right: Info & Action */}
-                <div className="order-1 lg:order-2 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-                    <div className="space-y-4">
-                        <span className="glass px-4 py-1.5 rounded-full text-xs font-bold border border-ronhub-blue/20 text-ronhub-light-blue uppercase tracking-widest">
-                            Exclusive 1st Edition Raffle
-                        </span>
-                        <h2 className="text-4xl md:text-6xl font-black leading-tight">
-                            Win the <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-ronhub-light-blue to-ronhub-blue">
-                                {process.env.NEXT_PUBLIC_RAFFLE_PRIZE || "BGS 7.5 1st Edition Charizard"}
+                {/* Left: Info & Action (7 cols on desktop) */}
+                <div className="lg:col-span-7 space-y-10 flex flex-col items-center lg:items-start text-center lg:text-left order-1 prize-reveal">
+                    <div className="space-y-6">
+                        <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full border border-white/10">
+                            <div className="w-2 h-2 rounded-full bg-ronhub-light-blue animate-pulse" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80">
+                                Live Ronin Giveaway
+                            </span>
+                        </div>
+
+                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black leading-[0.9] text-hero tracking-tighter">
+                            WIN THE <br />
+                            <span className="text-liquid">
+                                {process.env.NEXT_PUBLIC_RAFFLE_PRIZE?.toUpperCase() || "BGS 7.5 CHARIZARD"}
                             </span>
                         </h2>
-                        <p className="text-white/60 text-lg max-w-md font-medium">
-                            Join the Ronin ecosystem's most prestigious raffle. Collect your tickets and secure your chance to own a piece of history.
+
+                        <p className="text-white/50 text-base md:text-lg max-w-xl font-medium leading-relaxed opacity-80">
+                            Experience the elite standard of digital collectible giveaways. Powered by the Ronin Network, every entry is
+                            <span className="text-white ml-1">100% transparent and verifiable on-chain</span>.
                         </p>
                     </div>
 
-                    <RaffleInfo />
+                    {/* Prominent Prize Highlight */}
+                    <div className="w-full glass p-8 rounded-[2.5rem] relative overflow-hidden group prize-card-glow transition-all duration-700 hover:scale-[1.02]">
+                        <div className="absolute inset-0 prize-highlight-bg opacity-30" />
+                        <div className="relative flex flex-col items-center justify-center text-center">
+                            <div className="space-y-2">
+                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-gold/60 block">Grand Prize Value</span>
+                                <h3 className="text-6xl md:text-8xl font-black text-gold font-display leading-none">
+                                    {process.env.NEXT_PUBLIC_RAFFLE_VALUE || "£19,299"}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div className="w-full max-w-md">
+                    <div className="w-full max-w-2xl">
+                        <RaffleInfo />
+                    </div>
+
+                    <div className="w-full max-w-md lg:max-w-xl group">
                         <BuyTicketButton
                             address={address}
                             onPurchaseSuccess={handlePurchaseSuccess}
                         />
                     </div>
                 </div>
+
+                {/* Right: 3D Showcase (5 cols on desktop) */}
+                <div className="lg:col-span-5 order-2 flex justify-center">
+                    <div className="relative w-full max-w-[450px]">
+                        <div className="absolute inset-0 bg-ronhub-blue/10 blur-[150px] -z-10 animate-pulse" />
+                        <HeroSlider />
+                    </div>
+                </div>
             </div>
 
             {/* User Area */}
             {address && (
-                <div className="w-full max-w-7xl px-6 flex flex-col items-center">
-                    <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-12" />
+                <div className="w-full max-w-7xl mx-auto px-6 flex flex-col items-center">
+                    <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-20" />
                     <UserTickets address={address} refreshTrigger={refreshTrigger} />
                 </div>
             )}
 
             {/* Footer */}
-            <footer className="mt-24 text-center space-y-6 px-6">
-                <p className="text-[10px] text-white/20 font-bold uppercase tracking-[0.2em] max-w-2xl mx-auto leading-loose">
-                    This raffle is for entertainment purposes. Participants must be 18+. Verifiable on-chain data on Ronin. Odds depend on total tickets sold. Void where prohibited by law.
-                </p>
-                <div className="flex items-center justify-center gap-6 text-[10px] font-black uppercase tracking-widest text-white/40">
-                    <a href="#" className="hover:text-ronhub-light-blue transition-colors">Terms</a>
-                    <a href="#" className="hover:text-ronhub-light-blue transition-colors">Privacy</a>
-                    <a href="#" className="hover:text-ronhub-light-blue transition-colors">Support</a>
+            <footer className="mt-32 w-full max-w-7xl mx-auto p-10 border-t border-white/5 flex flex-col items-center gap-8 text-center relative z-10">
+                <div className="space-y-4 flex flex-col items-center">
+                    <div className="flex items-center gap-2">
+                        <img src="/logo.png" className="w-6 h-6 object-contain mix-blend-lighten" alt="RonHub" />
+                        <span className="text-sm font-black uppercase tracking-tighter">RonHub</span>
+                    </div>
+                    <div className="space-y-1">
+                        <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">
+                            © 2026 RonHub. All rights reserved.
+                        </p>
+                        <p className="text-[10px] text-white/20 font-bold uppercase tracking-widest leading-loose max-w-md mx-auto">
+                            18+ Only. Every entry is independently verifiable on the Ronin blockchain to ensure total transparency.
+                        </p>
+                    </div>
                 </div>
             </footer>
         </div>

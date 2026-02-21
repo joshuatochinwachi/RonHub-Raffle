@@ -3,7 +3,7 @@ import { Clock, Ticket, Trophy } from 'lucide-react';
 
 export default function RaffleInfo() {
     const [info, setInfo] = useState(null);
-    const [timeLeft, setTimeLeft] = useState('');
+    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
     useEffect(() => {
         const fetchInfo = async () => {
@@ -39,7 +39,12 @@ export default function RaffleInfo() {
             const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-            setTimeLeft(`${days}d ${hours}h ${mins}m ${secs}s`);
+            setTimeLeft({
+                days,
+                hours,
+                minutes: mins,
+                seconds: secs
+            });
         };
 
         calculateTime();
@@ -51,54 +56,68 @@ export default function RaffleInfo() {
         <div className="w-full max-w-2xl glass p-8 rounded-3xl animate-pulse h-48" />
     );
 
-    const progress = Math.max(5, (info.totalTickets / info.maxTickets) * 100);
+    const progress = (info.totalTickets / info.maxTickets) * 100;
 
     return (
-        <div className="w-full max-w-2xl glass p-8 rounded-3xl border border-white/5 shadow-2xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                {/* Stat 1: Tickets Sold */}
-                <div className="flex flex-col items-center md:items-start">
-                    <div className="flex items-center gap-2 text-ronhub-light-blue mb-2">
-                        <Ticket size={18} />
-                        <span className="text-xs font-bold uppercase tracking-widest">Tickets Sold</span>
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Tickets Sold */}
+            <div className="glass-card p-6 rounded-3xl flex flex-col justify-between group hover:border-ronhub-blue/30 transition-all duration-500">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Sold</span>
+                    <div className="w-8 h-8 rounded-xl bg-ronhub-blue/10 flex items-center justify-center text-ronhub-light-blue group-hover:scale-110 transition-transform">
+                        <Ticket size={14} />
                     </div>
-                    <p className="text-3xl font-black text-white">{(info?.totalTickets || 0).toLocaleString()}</p>
                 </div>
-
-                {/* Stat 2: Time Remaining */}
-                <div className="flex flex-col items-center md:items-start">
-                    <div className="flex items-center gap-2 text-ronhub-light-blue mb-2">
-                        <Clock size={18} />
-                        <span className="text-xs font-bold uppercase tracking-widest">Ending In</span>
-                    </div>
-                    <p className="text-xl font-black text-white font-mono">{timeLeft}</p>
-                </div>
-
-                {/* Stat 3: Ticket Price */}
-                <div className="flex flex-col items-center md:items-start">
-                    <div className="flex items-center gap-2 text-ronhub-light-blue mb-2">
-                        <Trophy size={18} />
-                        <span className="text-xs font-bold uppercase tracking-widest">Prize Value</span>
-                    </div>
-                    <p className="text-xl font-black text-white">{info.priceDisplay}</p>
+                <div className="space-y-1">
+                    <p className="text-4xl font-black text-white font-display">
+                        {(info?.totalTickets || 0).toLocaleString()}
+                    </p>
+                    <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">
+                        Tickets Entered
+                    </p>
                 </div>
             </div>
 
-            {/* Progress Bar */}
-            <div className="relative">
-                <div className="flex justify-between text-xs font-bold mb-3 uppercase tracking-wider">
-                    <span className="text-ronhub-light-blue">Raffle Progress</span>
-                    <span className="text-white">{Math.floor(progress)}% Filled</span>
+            {/* Time Remaining */}
+            <div className="glass-card p-6 rounded-3xl flex flex-col justify-between group hover:border-ronhub-blue/30 transition-all duration-500">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Ending</span>
+                    <div className="w-8 h-8 rounded-xl bg-ronhub-blue/10 flex items-center justify-center text-ronhub-light-blue group-hover:animate-spin">
+                        <Clock size={14} />
+                    </div>
                 </div>
-                <div className="h-4 w-full bg-white/5 rounded-full overflow-hidden border border-white/10 p-1">
+                <div className="space-y-1">
+                    <p className="text-2xl font-black text-white font-display tabular-nums leading-none">
+                        {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m
+                    </p>
+                    <p className="text-xl font-black text-ronhub-light-blue/80 font-display tabular-nums">
+                        {timeLeft.seconds}s
+                    </p>
+                </div>
+            </div>
+
+            {/* Progress Bar - Spans full width */}
+            <div className="md:col-span-2 mt-4 glass-card p-8 rounded-3xl space-y-4">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="px-3 py-1 bg-ronhub-blue/20 rounded-lg border border-ronhub-blue/30">
+                            <span className="text-[10px] font-black text-ronhub-light-blue uppercase tracking-widest">
+                                {progress > 0 && progress < 1 ? progress.toFixed(2) : Math.round(progress)}% Filled
+                            </span>
+                        </div>
+                    </div>
+                    <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em]">
+                        Raffle Inventory: {(info?.maxTickets || 10000).toLocaleString()} Max
+                    </span>
+                </div>
+
+                <div className="relative h-3 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
                     <div
-                        className="h-full bg-gradient-to-r from-ronhub-blue to-ronhub-light-blue rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(29,78,216,0.5)]"
-                        style={{ width: `${progress}%` }}
-                    />
-                </div>
-                <div className="flex justify-between mt-2 text-[10px] text-white/40 font-bold uppercase tracking-tighter">
-                    <span>0 Sold</span>
-                    <span>{(info?.maxTickets || 10000).toLocaleString()} Max</span>
+                        className="absolute h-full bg-gradient-to-r from-ronhub-blue to-ronhub-light-blue transition-all duration-1000 ease-out flex items-center justify-end px-1"
+                        style={{ width: `${Math.min(100, progress)}%` }}
+                    >
+                        <div className="w-1 h-full bg-white/40 blur-[2px]" />
+                    </div>
                 </div>
             </div>
         </div>

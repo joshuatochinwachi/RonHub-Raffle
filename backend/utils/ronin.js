@@ -1,15 +1,16 @@
 const { ethers } = require('ethers');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
+require('dotenv').config();
 
 /**
  * Verifies a completed USDC transfer on Ronin
  * @param {string} txHash - The transaction hash to verify
  * @param {string} vaultAddress - The recipient address (Vault)
  * @param {string} usdcContract - The USDC contract address
+ * @param {number} quantity - Number of tickets being purchased
  * @returns {Promise<boolean>}
  */
-async function verifyRoninTransaction(txHash, vaultAddress, usdcContract) {
+async function verifyRoninTransaction(txHash, vaultAddress, usdcContract, quantity = 1) {
     const provider = new ethers.JsonRpcProvider(process.env.RONIN_RPC_URL);
 
     try {
@@ -19,14 +20,12 @@ async function verifyRoninTransaction(txHash, vaultAddress, usdcContract) {
         if (receipt.status !== 1) throw new Error('Transaction failed');
 
         // Parse Transfer event from logs
-        // ERC-20 Transfer event signature: event Transfer(address indexed from, address indexed to, uint256 value)
         const transferIface = new ethers.Interface([
             'event Transfer(address indexed from, address indexed to, uint256 value)'
         ]);
 
         let transferFound = false;
         for (const log of receipt.logs) {
-            // Check if log is from the USDC contract
             if (log.address.toLowerCase() !== usdcContract.toLowerCase()) continue;
 
             try {
@@ -34,21 +33,20 @@ async function verifyRoninTransaction(txHash, vaultAddress, usdcContract) {
                 const to = parsed.args.to.toLowerCase();
                 const value = parsed.args.value;
 
-                // Calculate expected amount based on TICKET_PRICE (assuming 6 decimals for USDC)
+                // Calculate expected amount based on TICKET_PRICE * quantity (assuming 6 decimals for USDC)
                 const ticketPrice = parseInt(process.env.TICKET_PRICE || 2);
-                const expectedAmount = BigInt(ticketPrice) * BigInt(10 ** 6);
+                const expectedAmount = BigInt(ticketPrice) * BigInt(quantity) * BigInt(10 ** 6);
 
                 if (to === vaultAddress.toLowerCase() && value === expectedAmount) {
                     transferFound = true;
                     break;
                 }
             } catch (e) {
-                // Skip logs that don't match the Transfer interface
                 continue;
             }
         }
 
-        if (!transferFound) throw new Error('Valid 2 USDC transfer not found in transaction');
+        if (!transferFound) throw new Error(`Valid ${parseInt(process.env.TICKET_PRICE || 2) * quantity} USDC transfer not found in transaction`);
         return true;
     } catch (error) {
         console.error('Ronin verification error:', error.message);
