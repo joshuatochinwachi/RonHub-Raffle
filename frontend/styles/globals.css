@@ -17,7 +17,6 @@
 html,
 body {
   background: #03050c;
-  /* Solid fall-back to prevent white twitches */
   color: rgb(var(--foreground-rgb));
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
@@ -31,7 +30,6 @@ body {
 body {
   background: radial-gradient(circle at 50% 0%, #0c1222 0%, #03050c 100%);
   background-attachment: fixed;
-  /* Keep background stable during scroll */
 }
 
 h1,
@@ -49,7 +47,6 @@ h4,
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
 .glass-card {
@@ -58,7 +55,6 @@ h4,
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   transform: translateZ(0);
-  backface-visibility: hidden;
   will-change: transform;
 }
 
@@ -91,22 +87,6 @@ h4,
 .animate-float {
   animation: float 6s ease-in-out infinite;
   will-change: transform;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.premium-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 3s infinite;
 }
 
 @keyframes liquidShift {
@@ -223,43 +203,39 @@ h4,
 @media (max-width: 768px) {
   body {
     background: #03050c !important;
-    /* Total removal of gradients on mobile for max stability */
   }
 
   .glass,
   .glass-card,
   header {
-    backdrop-filter: none !important;
-    /* Disable expensive blurs on mobile */
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(8px) !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
   }
 
   .text-liquid {
-    animation: liquidShift 15s ease infinite !important;
+    background: linear-gradient(135deg, #fff 0%, #60a5fa 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    animation: none !important;
     filter: none !important;
-    background: #fff !important;
-    /* Solid color for heavy text on mobile */
-    -webkit-text-fill-color: initial !important;
-    -webkit-background-clip: initial !important;
   }
 
   .noise-overlay,
   .mesh-glow,
   .fixed-bg-layer {
     display: none !important;
-    /* Deep clean of overlays */
   }
 
   .prize-card-glow {
-    box-shadow: none !important;
-    border-color: rgba(251, 191, 36, 0.3) !important;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.1) !important;
+    border-color: rgba(251, 191, 36, 0.2) !important;
   }
 
   .animate-float,
   .prize-reveal {
     animation: none !important;
-    /* Stop all moving parts on scroll trigger */
     opacity: 1 !important;
     transform: none !important;
   }
