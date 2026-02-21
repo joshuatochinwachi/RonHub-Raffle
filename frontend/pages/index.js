@@ -69,7 +69,7 @@ export default function Home() {
 
                 {/* Left: Info & Action */}
                 <div className="lg:col-span-7 lg:order-1 space-y-6 md:space-y-10 flex flex-col items-center lg:items-start text-center lg:text-left prize-reveal w-full">
-                    <div className="space-y-4 md:space-y-6">
+                    <div className="space-y-4 md:space-y-6 w-full flex flex-col items-center lg:items-start">
                         <div className="inline-flex items-center gap-2 glass px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10">
                             <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-ronhub-light-blue animate-pulse" />
                             <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white/80">
@@ -77,7 +77,7 @@ export default function Home() {
                             </span>
                         </div>
 
-                        <h2 className="text-4xl md:text-7xl lg:text-8xl font-black leading-[1] md:leading-[0.9] text-hero tracking-tighter max-w-[15ch]">
+                        <h2 className="text-4xl md:text-7xl lg:text-8xl font-black leading-[1] md:leading-[0.9] text-hero tracking-tighter w-full">
                             WIN THE <br />
                             <span className="text-liquid">
                                 {process.env.NEXT_PUBLIC_RAFFLE_PRIZE?.toUpperCase() || "BGS 7.5 CHARIZARD"}

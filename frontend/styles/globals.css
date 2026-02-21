@@ -178,6 +178,26 @@ h4,
   }
 }
 
+@keyframes goldDance {
+
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  25% {
+    transform: scale(1.02) rotate(0.5deg);
+  }
+
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  75% {
+    transform: scale(1.02) rotate(-0.5deg);
+  }
+}
+
 .prize-highlight-bg {
   background: linear-gradient(90deg, rgba(251, 191, 36, 0.05) 0%, rgba(251, 191, 36, 0.15) 50%, rgba(251, 191, 36, 0.05) 100%);
   background-size: 200% 100%;
@@ -191,6 +211,8 @@ h4,
   background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.4));
+  animation: goldDance 3s ease-in-out infinite;
+  display: inline-block;
 }
 
 .prize-card-glow {
