@@ -10,6 +10,7 @@
     "scripts": {
         "dev:frontend": "npm run dev --workspace=ronhub-raffle-frontend",
         "dev:backend": "npm run dev --workspace=ronhub-raffle-backend",
+        "start": "node backend/server.js",
         "start:backend": "npm run start --workspace=ronhub-raffle-backend",
         "install:all": "npm install && npm install --prefix frontend && npm install --prefix backend"
     }
