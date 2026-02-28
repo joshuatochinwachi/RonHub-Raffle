@@ -48,9 +48,11 @@ const rules = [
             children: [
                 'The full 36-day period expires, or',
                 '10,000 raffle tickets are sold.',
-                'Once closed, no further ticket purchases will be accepted.',
             ],
         },
+        trailingItems: [
+            'Once closed, no further ticket purchases will be accepted.',
+        ],
     },
     {
         num: 6,
@@ -273,6 +275,16 @@ export default function RaffleRules({ inline = false }) {
                                                         ))}
                                                     </ul>
                                                 </div>
+                                            )}
+                                            {rule.trailingItems && (
+                                                <ul className="space-y-2">
+                                                    {rule.trailingItems.map((item, i) => (
+                                                        <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-white/60 leading-relaxed text-left">
+                                                            <span className="w-1 h-1 rounded-full bg-ronhub-light-blue/60 flex-shrink-0 mt-2" />
+                                                            {item}
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             )}
                                             {rule.subSections && rule.subSections.map((sub, si) => (
                                                 <div key={si} className="mt-3 pl-4 border-l border-ronhub-blue/20 space-y-2">
