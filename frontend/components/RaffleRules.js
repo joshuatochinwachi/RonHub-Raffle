@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, ScrollText, ChevronDown } from 'lucide-react';
 
 const rules = [
@@ -136,6 +136,16 @@ export default function RaffleRules({ inline = false }) {
 
     const toggle = (num) => setExpanded(prev => prev === num ? null : num);
 
+    // Lock body scroll when modal is open
+    useEffect(() => {
+        if (open) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [open]);
+
     return (
         <>
             {/* Trigger Button — two variants */}
@@ -162,8 +172,12 @@ export default function RaffleRules({ inline = false }) {
                     className="fixed inset-0 z-[200] flex items-end md:items-center justify-center p-0 md:p-6"
                     onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
                 >
-                    {/* Backdrop */}
-                    <div className="absolute inset-0 bg-black/85 backdrop-blur-md" onClick={() => setOpen(false)} />
+                    {/* Backdrop — near-opaque to fully conceal the page behind */}
+                    <div
+                        className="absolute inset-0 backdrop-blur-sm"
+                        style={{ background: 'rgba(2, 4, 12, 0.96)' }}
+                        onClick={() => setOpen(false)}
+                    />
 
                     {/* Modal Panel */}
                     <div className="relative w-full md:max-w-2xl max-h-[92vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(29,78,216,0.15),0_25px_60px_rgba(0,0,0,0.7)]"
