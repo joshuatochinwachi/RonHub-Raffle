@@ -113,6 +113,11 @@ export default function Home() {
                             address={address}
                             onPurchaseSuccess={handlePurchaseSuccess}
                         />
+                        {/* Inline consent + rules trigger */}
+                        <div className="flex items-center justify-center gap-1.5 mt-3">
+                            <span className="text-[9px] md:text-[10px] text-white/30 font-medium">By purchasing, you agree to our</span>
+                            <RaffleRules inline />
+                        </div>
                     </div>
                 </div>
             </div>

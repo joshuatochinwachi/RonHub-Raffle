@@ -130,7 +130,7 @@ const rules = [
     },
 ];
 
-export default function RaffleRules() {
+export default function RaffleRules({ inline = false }) {
     const [open, setOpen] = useState(false);
     const [expanded, setExpanded] = useState(null);
 
@@ -138,14 +138,23 @@ export default function RaffleRules() {
 
     return (
         <>
-            {/* Trigger Button */}
-            <button
-                onClick={() => setOpen(true)}
-                className="group inline-flex items-center gap-2 text-white/40 hover:text-white/70 transition-all duration-300 text-[10px] md:text-xs font-bold uppercase tracking-widest"
-            >
-                <ScrollText className="w-3 h-3 md:w-3.5 md:h-3.5 group-hover:text-ronhub-light-blue transition-colors duration-300" />
-                <span>Official Raffle Rules & Terms</span>
-            </button>
+            {/* Trigger Button — two variants */}
+            {inline ? (
+                <button
+                    onClick={() => setOpen(true)}
+                    className="text-[9px] md:text-[10px] text-ronhub-light-blue/70 hover:text-ronhub-light-blue font-bold underline underline-offset-2 transition-colors duration-200"
+                >
+                    Official Rules & Terms
+                </button>
+            ) : (
+                <button
+                    onClick={() => setOpen(true)}
+                    className="group inline-flex items-center gap-2 text-white/40 hover:text-white/70 transition-all duration-300 text-[10px] md:text-xs font-bold uppercase tracking-widest"
+                >
+                    <ScrollText className="w-3 h-3 md:w-3.5 md:h-3.5 group-hover:text-ronhub-light-blue transition-colors duration-300" />
+                    <span>Official Raffle Rules & Terms</span>
+                </button>
+            )}
 
             {/* Modal Overlay */}
             {open && (
