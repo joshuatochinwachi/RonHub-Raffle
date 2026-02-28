@@ -163,14 +163,22 @@ export default function RaffleRules({ inline = false }) {
                     onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
                 >
                     {/* Backdrop */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setOpen(false)} />
+                    <div className="absolute inset-0 bg-black/85 backdrop-blur-md" onClick={() => setOpen(false)} />
 
                     {/* Modal Panel */}
-                    <div className="relative w-full md:max-w-2xl max-h-[92vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden border border-white/10 shadow-2xl"
-                        style={{ background: 'linear-gradient(160deg, #0d1526 0%, #07091a 100%)' }}>
+                    <div className="relative w-full md:max-w-2xl max-h-[92vh] flex flex-col rounded-t-3xl md:rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(29,78,216,0.15),0_25px_60px_rgba(0,0,0,0.7)]"
+                        style={{
+                            background: 'linear-gradient(175deg, #0e1830 0%, #080c1a 40%, #030510 100%)',
+                            border: '1px solid rgba(96, 165, 250, 0.12)',
+                        }}>
+
+                        {/* Inner Glow Layer — top blue ambient */}
+                        <div className="absolute top-0 left-0 right-0 h-40 pointer-events-none z-0"
+                            style={{ background: 'radial-gradient(ellipse at 50% -20%, rgba(29,78,216,0.25) 0%, transparent 70%)' }}
+                        />
 
                         {/* Header */}
-                        <div className="flex items-center justify-between p-6 md:p-8 border-b border-white/5 flex-shrink-0">
+                        <div className="relative z-10 flex items-center justify-between p-6 md:p-8 border-b border-white/5 flex-shrink-0">
                             <div className="flex items-center gap-3">
                                 <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-ronhub-blue/20 border border-ronhub-blue/30">
                                     <ScrollText className="w-4 h-4 text-ronhub-light-blue" />
@@ -191,7 +199,7 @@ export default function RaffleRules({ inline = false }) {
                         </div>
 
                         {/* Scrollable Content */}
-                        <div className="flex-1 overflow-y-auto p-5 md:p-8 space-y-3 scrollbar-thin">
+                        <div className="relative z-10 flex-1 overflow-y-auto p-5 md:p-8 space-y-3 scrollbar-thin">
                             {rules.map((rule) => (
                                 <div
                                     key={rule.num}
@@ -252,7 +260,7 @@ export default function RaffleRules({ inline = false }) {
                         </div>
 
                         {/* Footer */}
-                        <div className="flex-shrink-0 px-5 py-4 md:px-8 md:py-5 border-t border-white/5 text-center">
+                        <div className="relative z-10 flex-shrink-0 px-5 py-4 md:px-8 md:py-5 border-t border-white/5 text-center">
                             <p className="text-[9px] md:text-[10px] text-white/25 uppercase tracking-widest font-bold">
                                 By purchasing a ticket, you agree to these official rules in full.
                             </p>
