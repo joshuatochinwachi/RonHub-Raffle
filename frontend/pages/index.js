@@ -4,6 +4,7 @@ import RaffleInfo from '@/components/RaffleInfo';
 import WalletButton from '@/components/WalletButton';
 import BuyTicketButton from '@/components/BuyTicketButton';
 import UserTickets from '@/components/UserTickets';
+import RaffleRules from '@/components/RaffleRules';
 
 export default function Home() {
     const [address, setAddress] = useState(null);
@@ -139,6 +140,9 @@ export default function Home() {
                             18+ Only. Every entry is independently verifiable on the Ronin blockchain to ensure total transparency.
                         </p>
                     </div>
+                    {/* Raffle Rules Link */}
+                    <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+                    <RaffleRules />
                 </div>
             </footer>
         </div>
