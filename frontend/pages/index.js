@@ -145,6 +145,7 @@ export default function Home() {
                             18+ Only. Every entry is independently verifiable on the Ronin blockchain to ensure total transparency.
                         </p>
                     </div>
+                </div>
             </footer>
         </div>
     );
