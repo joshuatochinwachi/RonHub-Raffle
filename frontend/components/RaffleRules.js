@@ -24,7 +24,7 @@ const rules = [
         num: 3,
         title: 'Ticket Pricing',
         items: [
-            'Each raffle ticket costs $2 USD.',
+            'Each raffle ticket costs $2 USDC.',
             'Ticket purchases are final and non-refundable, except where required by law.',
         ],
     },
@@ -42,11 +42,15 @@ const rules = [
         title: 'Raffle Duration & Closing Conditions',
         items: [
             'The raffle begins with a 36-day countdown.',
-            'The raffle will close when either of the following conditions is met, whichever occurs first:',
-            'The full 36-day period expires, or',
-            '10,000 raffle tickets are sold.',
-            'Once closed, no further ticket purchases will be accepted.',
         ],
+        nestedGroup: {
+            parent: 'The raffle will close when either of the following conditions is met, whichever occurs first:',
+            children: [
+                'The full 36-day period expires, or',
+                '10,000 raffle tickets are sold.',
+                'Once closed, no further ticket purchases will be accepted.',
+            ],
+        },
     },
     {
         num: 6,
@@ -73,7 +77,7 @@ const rules = [
                 label: 'Buyback Option:',
                 items: [
                     'Sell the prize back to the project for 80% of the prevailing market price at the time of settlement.',
-                    'Payment will be made in USDT to the wallet address provided by the winner.',
+                    'Payment will be made in USDT/USDC to the wallet address provided by the winner.',
                 ],
             },
         ],
@@ -240,26 +244,42 @@ export default function RaffleRules({ inline = false }) {
 
                                     {/* Expanded Content */}
                                     {expanded === rule.num && (
-                                        <div className="px-4 pb-5 md:px-5 md:pb-6 space-y-3 border-t border-white/5 pt-4">
+                                        <div className="px-4 pb-5 md:px-5 md:pb-6 space-y-3 border-t border-white/5 pt-4 text-left">
                                             {rule.intro && (
                                                 <p className="text-xs md:text-sm text-white/60 leading-relaxed">{rule.intro}</p>
                                             )}
                                             {rule.items && (
                                                 <ul className="space-y-2">
                                                     {rule.items.map((item, i) => (
-                                                        <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-white/60 leading-relaxed">
+                                                        <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-white/60 leading-relaxed text-left">
                                                             <span className="w-1 h-1 rounded-full bg-ronhub-light-blue/60 flex-shrink-0 mt-2" />
                                                             {item}
                                                         </li>
                                                     ))}
                                                 </ul>
                                             )}
+                                            {rule.nestedGroup && (
+                                                <div className="space-y-2">
+                                                    <div className="flex items-start gap-2.5">
+                                                        <span className="w-1 h-1 rounded-full bg-ronhub-light-blue/60 flex-shrink-0 mt-2" />
+                                                        <span className="text-xs md:text-sm text-white/60 leading-relaxed">{rule.nestedGroup.parent}</span>
+                                                    </div>
+                                                    <ul className="ml-4 pl-3 border-l border-white/10 space-y-2">
+                                                        {rule.nestedGroup.children.map((child, i) => (
+                                                            <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-white/50 leading-relaxed text-left">
+                                                                <span className="w-1 h-1 rounded-full bg-white/25 flex-shrink-0 mt-2" />
+                                                                {child}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
                                             {rule.subSections && rule.subSections.map((sub, si) => (
                                                 <div key={si} className="mt-3 pl-4 border-l border-ronhub-blue/20 space-y-2">
-                                                    <p className="text-[10px] md:text-xs font-black text-white/80 uppercase tracking-wider">{sub.label}</p>
+                                                    <p className="text-[10px] md:text-xs font-black text-white/80 uppercase tracking-wider text-left">{sub.label}</p>
                                                     <ul className="space-y-2">
                                                         {sub.items.map((item, i) => (
-                                                            <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-white/60 leading-relaxed">
+                                                            <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-white/60 leading-relaxed text-left">
                                                                 <span className="w-1 h-1 rounded-full bg-ronhub-light-blue/40 flex-shrink-0 mt-2" />
                                                                 {item}
                                                             </li>
