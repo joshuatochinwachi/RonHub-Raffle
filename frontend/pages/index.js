@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Home as HomeIcon } from 'lucide-react';
 import HeroSlider from '@/components/HeroSlider';
 import RaffleInfo from '@/components/RaffleInfo';
 import WalletButton from '@/components/WalletButton';
@@ -36,7 +37,11 @@ export default function Home() {
 
             {/* Header / Navbar */}
             <header className="w-full max-w-7xl mx-auto flex items-center justify-between p-6 md:p-10 sticky top-0 z-50 backdrop-blur-md bg-transparent">
-                <div className="flex items-center gap-2 md:gap-3 group cursor-pointer">
+                <a 
+                    href="https://ronhub.io" 
+                    className="flex items-center gap-2 md:gap-3 group cursor-pointer transition-all hover:opacity-80"
+                    title="Back to RonHub Home"
+                >
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl overflow-hidden flex items-center justify-center shadow-[0_0_20px_rgba(29,78,216,0.3)] transition-transform group-hover:scale-110 duration-500">
                         <img
                             src="/logo.png"
@@ -45,14 +50,17 @@ export default function Home() {
                         />
                     </div>
                     <div className="flex flex-col -space-y-1">
-                        <h1 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-none">
-                            RonHub
-                        </h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-none">
+                                RonHub
+                            </h1>
+                            <HomeIcon size={14} className="text-ronhub-light-blue opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500" />
+                        </div>
                         <span className="text-[8px] md:text-[10px] font-bold text-ronhub-light-blue uppercase tracking-[0.3em]">
                             Raffle
                         </span>
                     </div>
-                </div>
+                </a>
 
                 <WalletButton onAddressChange={setAddress} />
             </header>
