@@ -58,18 +58,18 @@ export default function Home() {
             </header>
 
             {/* Hero Section */}
-            <div className="w-full max-w-7xl mx-auto flex flex-col items-center px-6 mt-4 md:mt-16 gap-12 lg:gap-8 lg:grid lg:grid-cols-12">
+            <div className="w-full max-w-7xl mx-auto flex flex-col items-center px-6 mt-4 md:mt-16 gap-12 lg:gap-4 lg:grid lg:grid-cols-12 lg:items-center">
 
                 {/* Right: 3D Showcase (On top for mobile) */}
-                <div className="lg:col-span-5 lg:order-2 flex justify-center w-full">
-                    <div className="relative w-full max-w-[320px] md:max-w-[450px]">
+                <div className="lg:col-span-6 lg:order-2 flex justify-center items-center w-full">
+                    <div className="relative w-full">
                         <div className="absolute inset-0 bg-ronhub-blue/10 blur-[100px] md:blur-[150px] -z-10 animate-pulse" />
                         <HeroSlider />
                     </div>
                 </div>
 
                 {/* Left: Info & Action */}
-                <div className="lg:col-span-7 lg:order-1 space-y-6 md:space-y-10 flex flex-col items-center lg:items-start text-center lg:text-left prize-reveal w-full">
+                <div className="lg:col-span-6 lg:order-1 space-y-6 md:space-y-10 flex flex-col items-center lg:items-start text-center lg:text-left prize-reveal w-full">
                     <div className="space-y-4 md:space-y-6 w-full flex flex-col items-center lg:items-start">
                         <div className="inline-flex items-center gap-2 glass px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10">
                             <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-ronhub-light-blue animate-pulse" />
@@ -78,10 +78,10 @@ export default function Home() {
                             </span>
                         </div>
 
-                        <h2 className="text-4xl md:text-7xl lg:text-8xl font-black leading-[1] md:leading-[0.9] text-hero tracking-tighter w-full">
+                        <h2 className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1] md:leading-[0.9] text-hero tracking-tighter w-full">
                             WIN THE <br />
                             <span className="text-liquid">
-                                {process.env.NEXT_PUBLIC_RAFFLE_PRIZE?.toUpperCase() || "PIKACHU XY-P PROMO PSA 10"}
+                                TWIN PRIZE <br className="hidden md:block" /> PIKACHU EDITION
                             </span>
                         </h2>
 
@@ -96,9 +96,9 @@ export default function Home() {
                         <div className="absolute inset-0 prize-highlight-bg opacity-30" />
                         <div className="relative flex flex-col items-center justify-center text-center">
                             <div className="space-y-1 md:space-y-2">
-                                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-gold/60 block">Grand Prize Value</span>
+                                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-gold/60 block">Twin Prize Total Value</span>
                                 <h3 className="text-4xl md:text-8xl font-black text-gold font-display leading-none">
-                                    {process.env.NEXT_PUBLIC_RAFFLE_VALUE || "£40,366.42"}
+                                    ${process.env.NEXT_PUBLIC_RAFFLE_VALUE || "20,000.00"}
                                 </h3>
                             </div>
                         </div>

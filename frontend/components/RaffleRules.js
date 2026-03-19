@@ -32,8 +32,8 @@ const rules = [
         num: 4,
         title: 'Prize Details',
         items: [
-            'The raffle prize is a PSA-graded Pokémon slab.',
-            'The estimated market value of the prize is listed at its lowest observed price of $16,000 USD, with some market listings reaching up to $22,000 USD.',
+            'The raffle prize consists of twin PSA-graded Pokémon slabs (two winners\' choice or specificed pair).',
+            'The total estimated market value of the twin prize is listed at $20,000.00 USD.',
             'Market values may fluctuate, and no fixed value is guaranteed at the time of drawing.',
         ],
     },
@@ -41,12 +41,12 @@ const rules = [
         num: 5,
         title: 'Raffle Duration & Closing Conditions',
         items: [
-            'The raffle begins with a 36-day countdown.',
+            'The raffle begins with a 44-day countdown.',
         ],
         nestedGroup: {
             parent: 'The raffle will close when either of the following conditions is met, whichever occurs first:',
             children: [
-                'The full 36-day period expires, or',
+                'The full 44-day period expires, or',
                 '10,000 raffle tickets are sold.',
             ],
         },
