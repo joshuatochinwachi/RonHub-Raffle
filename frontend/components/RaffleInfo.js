@@ -86,7 +86,7 @@ export default function RaffleInfo() {
                         </div>
 
                         <a 
-                            href={`https://roninchain.com/tx/${info.winner.txHash}`}
+                            href={`https://app.roninchain.com/tx/${info.winner.txHash}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-white"
