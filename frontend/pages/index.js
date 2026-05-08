@@ -10,6 +10,7 @@ import RaffleRules from '@/components/RaffleRules';
 export default function Home() {
     const [address, setAddress] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [hasWinner, setHasWinner] = useState(false);
 
     useEffect(() => {
         if (window.innerWidth < 768) return;
@@ -22,6 +23,29 @@ export default function Home() {
         };
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
+
+    useEffect(() => {
+        const checkWinner = async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/raffle-info`);
+                const data = await res.json();
+                if (data.winner) {
+                    setHasWinner(true);
+                    // Trigger confetti burst
+                    const confetti = (await import('canvas-confetti')).default;
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#D4AF37', '#FFFFFF', '#1D4ED8']
+                    });
+                }
+            } catch (err) {
+                console.error("Check winner error:", err);
+            }
+        };
+        checkWinner();
     }, []);
 
     const handlePurchaseSuccess = (ticketNumber) => {
@@ -116,17 +140,25 @@ export default function Home() {
                         <RaffleInfo />
                     </div>
 
-                    <div className="w-full max-w-md lg:max-w-xl group">
-                        <BuyTicketButton
-                            address={address}
-                            onPurchaseSuccess={handlePurchaseSuccess}
-                        />
-                        {/* Inline consent + rules trigger */}
-                        <div className="flex items-center justify-center gap-1.5 mt-3">
-                            <span className="text-[9px] md:text-[10px] text-white/30 font-medium">By purchasing, you agree to our</span>
-                            <RaffleRules inline />
+                    {!hasWinner && (
+                        <div className="w-full max-w-md lg:max-w-xl group animate-in fade-in zoom-in duration-700">
+                            <BuyTicketButton
+                                address={address}
+                                onPurchaseSuccess={handlePurchaseSuccess}
+                            />
+                            {/* Inline consent + rules trigger */}
+                            <div className="flex items-center justify-center gap-1.5 mt-3">
+                                <span className="text-[9px] md:text-[10px] text-white/30 font-medium">By purchasing, you agree to our</span>
+                                <RaffleRules inline />
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+                    {hasWinner && (
+                        <div className="text-center py-4 animate-bounce">
+                            <p className="text-gold font-black uppercase tracking-[0.3em] text-[10px]">🏆 Raffle Successfully Completed 🏆</p>
+                        </div>
+                    )}
                 </div>
             </div>
 

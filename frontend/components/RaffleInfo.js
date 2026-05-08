@@ -58,6 +58,58 @@ export default function RaffleInfo() {
 
     const progress = (info.totalTickets / info.maxTickets) * 100;
 
+    if (info.winner) {
+        return (
+            <div className="w-full space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                <div className="glass-card p-8 rounded-[2.5rem] border-gold/30 bg-gold/5 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,175,55,0.1),transparent_70%)]" />
+                    
+                    <div className="relative flex flex-col items-center text-center space-y-6">
+                        <div className="w-20 h-20 rounded-full bg-gold/20 flex items-center justify-center text-gold shadow-[0_0_30px_rgba(212,175,55,0.3)] animate-bounce">
+                            <Trophy size={40} />
+                        </div>
+
+                        <div className="space-y-2">
+                            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-gold/60">Official Winner Drawn</span>
+                            <h2 className="text-4xl md:text-6xl font-black text-white font-display tracking-tighter">
+                                TICKET #{info.winner.ticketNumber}
+                            </h2>
+                        </div>
+
+                        <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+
+                        <div className="space-y-1">
+                            <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Winning Wallet</p>
+                            <p className="text-sm md:text-lg font-mono text-gold/90 break-all px-4">
+                                {info.winner.wallet}
+                            </p>
+                        </div>
+
+                        <a 
+                            href={`https://roninchain.com/tx/${info.winner.txHash}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-white"
+                        >
+                            Verify on Ronin Explorer
+                        </a>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="glass-card p-4 rounded-3xl text-center">
+                        <p className="text-[8px] font-black text-white/40 uppercase tracking-widest mb-1">Total Entries</p>
+                        <p className="text-xl font-black text-white">{info.totalTickets.toLocaleString()}</p>
+                    </div>
+                    <div className="glass-card p-4 rounded-3xl text-center">
+                        <p className="text-[8px] font-black text-white/40 uppercase tracking-widest mb-1">Drawn On</p>
+                        <p className="text-xl font-black text-white">{new Date(info.winner.drawnAt).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Tickets Sold */}
